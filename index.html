@@ -122,7 +122,7 @@
     checkRow = row;
     checkCol = col;
   
-    while ((checkRow + 1 <= num - 1) && (checkCol - 1 <= 0) && board[row][col] === board[checkRow + 1][checkCol - 1]) {
+    while ((checkRow + 1 <= num - 1) && (checkCol - 1 >= 0) && board[row][col] === board[checkRow + 1][checkCol - 1]) {
       checkCol--;
       checkRow++;
       count++;
@@ -130,7 +130,7 @@
     
     checkRow = row;
     checkCol = col;
-    while ((checkRow - 1 >= 0) && (checkCol + 1 >= num - 1) && board[row][col] === board[checkRow - 1][checkCol + 1]) {
+    while ((checkRow - 1 >= 0) && (checkCol + 1 <= num - 1) && board[row][col] === board[checkRow - 1][checkCol + 1]) {
       checkCol++;
       checkRow--;
       count++;
