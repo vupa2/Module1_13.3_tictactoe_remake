@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="vn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>[Bài tập] Tic tac toe</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      user-select: none;
+    }
+    td {
+      border: 1px solid black;
+      height: 40px;
+      width: 40px;
+      padding: 0;
+      text-align: center;
+      font-size: 30px;
+    }
+  </style>
+</head>
+<body ondragstart="return false;" ondrop="return false;">
+  <table id="board"></table>
+<script>
+  let board = [], turnPlayed = 0, turnMax = 0,currentPlayer = 'X', num = 10, winNum = 5 - 2;
+  
+  // Draw Board
+  function drawBoard() {
+    let str = '';
+  
+    for (let row = 0; row < num; row++) {
+      board[row] = [];
+      str += '<tr>';
+      
+      for (let col = 0; col < num; col++) {
+        str += `<td onclick="clickBoard(${row}, ${col}, this)"></td>`
+      }
+    
+      str += '</tr>';
+    }
+  
+    document.getElementById('board').innerHTML = str;
+    
+    turnMax = Math.pow(num, 2);
+  }
+  
+  // Click Board
+  function clickBoard(y, x, target) {
+      turnPlayed++
+      target.innerText = currentPlayer;
+      board[y][x] = currentPlayer;
+    
+      if (checkWin(y, x)) {
+        setTimeout("displayInfo('win', currentPlayer)", 100);
+        return false;
+      } else if (turnPlayed === turnMax) {
+        displayInfo('draw');
+        return false;
+      } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+        target.removeAttribute('onclick');
+      }
+  }
+  
+  // Check Win
+  function checkWin(row, col) {
+    let count = 0, checkRow = row, checkCol = col;
+    // Kiem tra hang doc
+    // console.log(board[row - 1][col])
+    while ((checkRow + 1 <= num - 1) && board[row][col] === board[checkRow + 1][col]) {
+      checkRow++;
+      count++;
+    }
+    checkRow = row;
+    while ((checkRow - 1 >= 0) && board[row][col] === board[checkRow - 1][col]) {
+      checkRow--;
+      count++;
+    }
+    
+    if (count > winNum) return true;
+    
+    // Kiem tra hang ngang
+    count = 0;
+    while ((checkCol + 1 <= num - 1) && board[row][col] === board[row][checkCol + 1]) {
+      checkCol++;
+      count++;
+    }
+    
+    checkCol = col;
+    while ((checkCol - 1 >= 0) && board[row][col] === board[row][checkCol - 1]) {
+      checkCol--;
+      count++;
+    }
+    
+    if (count > winNum) return true;
+    
+    // Kiem tra cheo 1
+    count = 0;
+    checkRow = row;
+    checkCol = col;
+  
+    while ((checkRow + 1 <= num - 1) && (checkCol + 1 <= num - 1) && board[row][col] ===
+    board[checkRow + 1][checkCol + 1]) {
+      checkCol++;
+      checkRow++;
+      count++;
+    }
+    
+    checkRow = row;
+    checkCol = col;
+    while ((checkRow - 1 >= 0) && (checkCol - 1 >= 0) && board[row][col] === board[checkRow - 1][checkCol - 1]) {
+      checkCol--;
+      checkRow--;
+      count++;
+    }
+  
+    if (count > winNum) return true;
+    
+    // Kiem tra cheo 2
+    count = 0;
+    checkRow = row;
+    checkCol = col;
+  
+    while ((checkRow + 1 <= num - 1) && (checkCol - 1 <= 0) && board[row][col] === board[checkRow + 1][checkCol - 1]) {
+      checkCol--;
+      checkRow++;
+      count++;
+    }
+    
+    checkRow = row;
+    checkCol = col;
+    while ((checkRow - 1 >= 0) && (checkCol + 1 >= num - 1) && board[row][col] === board[checkRow - 1][checkCol + 1]) {
+      checkCol++;
+      checkRow--;
+      count++;
+    }
+  
+    if (count > winNum) return true;
+    
+    return false;
+  }
+  
+  // Display and clear
+  function displayInfo(message, currentPlayer) {
+    switch (message) {
+      case 'win':
+        alert(`${currentPlayer} win`);
+        break;
+      case 'draw':
+        alert(`Draw`);
+    }
+    
+    drawBoard();
+  }
+  
+  // Init
+  drawBoard();
+</script>
+</body>
+</html>
